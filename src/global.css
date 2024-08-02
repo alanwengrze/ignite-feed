@@ -19,7 +19,12 @@
 }
 
 body {
-  font-size: 1.6rem;
   background-color: var(--gray-900);
   color: var(--gray-100);
+  -webkit-font-smoothing: antialiased;
+}
+body, input, textarea, button {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 1.6rem;
 }
