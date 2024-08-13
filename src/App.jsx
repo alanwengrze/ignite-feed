@@ -1,9 +1,10 @@
-import { Post } from './Post'
+import { Post } from './components/Post'
 import { Header } from './components/Header'
+import { Sidebar } from './components/Sidebar'
 
 import styles from './App.module.css'
 import './global.css'
-import { Sidebar } from './components/Sidebar'
+
 function App() {
 
   return (
@@ -15,11 +16,11 @@ function App() {
         <main>
           <Post 
             author="Alan Wengrze"
-            content="Fala galeraa 👋"
+            work="Web Developer"
           />
           <Post 
-            author="Alan Wengrze"
-            content="Fala galeraa 👋"
+            author="Lucas Santos"
+            work="Técnico em informática"
           />
         </main>
       </div>
