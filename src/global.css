@@ -20,10 +20,12 @@
   
   --red-500: #F75A68;
 }
+
 :focus {
   outline:transparent;
   box-shadow: 0 0 0 2px var(--green-500);
 }
+
 
 body {
   background-color: var(--gray-900);
@@ -34,4 +36,8 @@ body, input, textarea, button {
   font-family: 'Roboto', sans-serif;
   font-weight: 400;
   font-size: 1.6rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.4rem;
+  }
 }
