@@ -1,47 +1,85 @@
+import { useState } from 'react'
+import { format, formatDistanceToNow } from 'date-fns'
+import ptBR from 'date-fns/locale/pt-BR'
 import { Comment } from './Comment'
 import { Avatar } from './Avatar'
 import styles from './Post.module.css'
-export function Post({author, work}) {
+
+
+export function Post({author, content, publishedAt}) {
+
+  const [comments, setComments] = useState([]);
+  const [newCommentText, setNewCommentText] = useState('');
+
+  const publishedDateFormatted = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", { locale: ptBR })
+  const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, { locale: ptBR, addSuffix: true })
+
+  function handleCreateNewComment(e){
+    e.preventDefault()
+    setComments([...comments, newCommentText])
+    setNewCommentText('')
+  }
+
+  function deleteComment(commentToDelete) {
+    const commentsWithoutDeletedOne = comments.filter(comment => {
+      return comment !== commentToDelete
+    })
+
+    setComments(commentsWithoutDeletedOne)
+  }
+
   return(
     <article className={styles.post}>
       <header>
 
         <div className={styles.author}>
           <Avatar 
-            src="https://github.com/alanwengrze.png"
+            src={author.avatarUrl}
           />
           <div className={styles.authorInfo}>
-            <strong>{author}</strong>
-            <span>{work}</span>
+            <strong>{author.name}</strong>
+            <span>{author.role}</span>
           </div>
         </div>
 
-        <time dateTime="2023-12-08 20:27:00">publicado há 1h</time>
+        <time title={publishedDateFormatted} dateTime={publishedAt.toISOString()}>{publishedDateRelativeToNow}</time>
         </header>
 
         <div className={styles.content}>
-          <p>Fala galeraa 👋</p>
-          <p>Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀</p>
-          <p> <a href="#">👉 jane.design/doctorcare</a></p>
-          <p className={styles.hashtags}>
-            <a href="#">#novoprojeto</a>
-            <a href="#">#nlw</a>
-            <a href="#">#rocketseat</a>
-          </p>
+          {
+            content.map((line, index) => {
+              if (line.type === 'paragraph') {
+                return <p key={index}>{line.content}</p>
+              } else if (line.type === 'link') {
+                return <p key={index}><a href="#">{line.content}</a></p>
+              }
+            })
+          }
         </div>
-        <form className={styles.commentForm}>
+        <form 
+          className={styles.commentForm}
+          onSubmit={handleCreateNewComment}
+        >
           <strong>Deixe seu feedback</strong>
           <textarea 
             placeholder="Deixe um comentário"
+            onChange={e => setNewCommentText(e.target.value)}
+            value={newCommentText}
           />
           <footer>
             <button type='submit'>Publicar</button>
           </footer>
         </form>
         <div className={styles.commentList}>
-          <Comment />
-          <Comment />
-          <Comment />
+          {
+            comments.map((comment, index) => {
+              return <Comment 
+                key={index}
+                content={comment}
+                onDeleteComment={deleteComment}
+              />
+            })
+          }
         </div>
     </article>
   )
